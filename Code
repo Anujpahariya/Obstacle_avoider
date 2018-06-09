@@ -1,0 +1,74 @@
+int dc1=5,dc2=9,dc11=6,dc22=10;
+int trig=8,echo=11;
+int distance=0,duration=0;
+void setup() {
+  // put your setup code here, to run once:
+  
+Serial.begin(9600);
+//dc motor 1
+pinMode(dc1,OUTPUT);
+pinMode(dc11,OUTPUT);
+//trig and echo pin of ultrasonic sensor
+pinMode(trig,OUTPUT);
+pinMode(echo,INPUT);
+//dc motot 2
+pinMode(dc2,OUTPUT);
+pinMode(dc22,OUTPUT);
+// enable and Vcc pins
+pinMode(2,OUTPUT);
+pinMode(3,OUTPUT);
+pinMode(13,OUTPUT);
+//initial motor direction
+  analogWrite(dc1,255);
+  analogWrite(dc11,0);
+  analogWrite(dc2,255);
+  analogWrite(dc22,0); 
+}
+  
+ void loop()   
+{
+   digitalWrite(2,HIGH);//enable
+   digitalWrite(3,HIGH);//Vcc 1
+   digitalWrite(13,HIGH);//Vcc 2
+  
+
+//low the trig pin on case it is high previously
+   digitalWrite(trig,LOW);
+   delayMicroseconds(2);
+   //trig high for 10 microsec.
+   digitalWrite(trig,HIGH);
+   delayMicroseconds(10);
+   digitalWrite(trig,LOW);
+  //calculating the pulse time at echo pin
+   duration=pulseIn(echo,HIGH);
+//speed of U.sensor is 0.034 cm/microsec.
+   distance=(duration*0.034)/2;
+//Serial.println("distance = ");
+//Serial.println(distance);
+//Serial.println("cm");
+   delay(200);
+   //if obstacle is near 
+if(distance<10){
+   delay(200);
+   //it avoid it
+   analogWrite(dc1,0);
+   analogWrite(dc11,255);
+   analogWrite(dc2,255);
+   analogWrite(dc22,0);
+   delay(900);
+   //then resume in forward direction
+   analogWrite(dc1,255);
+   analogWrite(dc11,0);
+   analogWrite(dc2,255);
+   analogWrite(dc22,0);
+   delay(200);
+  
+}
+
+  
+}
+
+  
+
+
+
